@@ -178,4 +178,4 @@ Este repositório é parte de um projeto educacional, mas contribuições são s
 <br />
 
 Desenvolvido por [**Rayssa**](https://github.com/Rayssa-Ferraz)
-Para dúvidas, sugestões ou colaborações, entre em contato via GitHub ou abra uma issue!
+Para dúvidas, sugestões ou colaborações, entre em contato via GitHub ou abra uma issue.

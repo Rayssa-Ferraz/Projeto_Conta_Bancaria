@@ -3,7 +3,10 @@ package conta_bancaria;
 import java.util.Scanner;
 
 import conta_bancaria.model.Conta;
+import conta_bancaria.model.ContaCorrente;
+import conta_bancaria.model.ContaPoupanca;
 import conta_bancaria.util.Cores;
+
 
 public class Menu {
 
@@ -36,6 +39,46 @@ public class Menu {
 		
 		c1.depositar(5000);
 		System.out.println("O Saldo da conta é: " + c1.getSaldo());
+		
+		// Instanciar Objetos da Classe ContaCorrente
+		
+				System.out.println("\n\nInstanciar Objeto da Classe ContaCorrente");
+				
+				ContaCorrente cc1 = new ContaCorrente(3, 456, 1, "Thuany Silva", 1000000.00f, 100000.00f);
+				
+				cc1.visualizar();
+				
+				// Sacar ContaCorrente
+				System.out.println("Sacar R$ 2.000.000.00f: " + cc1.sacar(2000000.00f));
+				System.out.println("O Saldo da conta é: R$ " + cc1.getSaldo());
+				
+				System.out.println("Sacar R$ 2.000.00f: " + cc1.sacar(2000.00f));
+				System.out.println("O Saldo da conta é: R$ " + cc1.getSaldo());
+				
+				// Depositar ContaCorrente
+				System.out.println("Depositar R$ 5.000.00");
+				cc1.depositar(5000.00f);
+				System.out.println("O Saldo da conta é: R$ " + cc1.getSaldo());
+				
+				// Instanciar Objeto da Classe ContaPopupanca
+				
+				System.out.println("\n\nInstanciar Objeto da Classe ContaPoupnca");
+				
+				ContaPoupanca cp1 = new ContaPoupanca(4, 456, 2, "Maria da Silva", 100000.00f, 15);
+						
+				cp1.visualizar();
+						
+				// Sacar ContaPoupanca
+				System.out.println("Sacar R$ 200.000.00: " + cp1.sacar(200000.00f));
+				System.out.println("O Saldo da conta é: R$ " + cp1.getSaldo());
+						
+				System.out.println("Sacar R$ 2.000.00: " + cp1.sacar(2000.00f));
+				System.out.println("O Saldo da conta é: R$ " + cp1.getSaldo());
+						
+				// Depositar ContaPopupanca
+				System.out.println("Depositar R$ 5.000.00");
+				cp1.depositar(5000.00f);
+				System.out.println("O Saldo da conta é: R$ " + cp1.getSaldo());
 
 		while (true) {
 

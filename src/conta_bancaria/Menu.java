@@ -129,7 +129,7 @@ public class Menu {
 	
 	private static void criarContasTeste() {
 		contaController.cadastrar(new ContaCorrente(1, 456, 1, "Thuany Silva", 1000000.00f, 100000.00f));
-		contaController.cadastrar(new ContaCorrente(1, 456, 2, "MArcia Condarco", 1000000.00f, 10));
+		contaController.cadastrar(new ContaCorrente(1, 456, 2, "Marcia Condarco", 1000000.00f, 10));
 	}
 	
 	private static void listarContas() {

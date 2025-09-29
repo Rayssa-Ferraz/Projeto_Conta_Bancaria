@@ -4,6 +4,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import conta_bancaria.controller.ContaController;
+import conta_bancaria.model.Conta;
 import conta_bancaria.model.ContaCorrente;
 import conta_bancaria.model.ContaPoupanca;
 import conta_bancaria.util.Cores;
@@ -64,6 +65,7 @@ public class Menu {
 				switch (opcao) {
 				case 1:
 					System.out.println(Cores.TEXT_CYAN_BRIGHT + "Criar Conta\n\n");
+					cadastrarConta();
 					
 					keyPress();
 					break;
@@ -76,16 +78,20 @@ public class Menu {
 					break;
 				case 3:
 					System.out.println(Cores.TEXT_CYAN_BRIGHT + "Consultar dados da Conta - por número\n\n");
+					procurarContaPorNumero();
 					
 					keyPress();
 					break;
 				case 4:
 					System.out.println(Cores.TEXT_CYAN_BRIGHT + "Atualizar dados da Conta\n\n");
 					
+					atualizarConta();
+					
 					keyPress();
 					break;
 				case 5:
 					System.out.println(Cores.TEXT_CYAN_BRIGHT + "Apagar a Conta\n\n");
+					deletarConta();
 					
 					keyPress();
 					break;
@@ -128,14 +134,139 @@ public class Menu {
 	}
 	
 	private static void criarContasTeste() {
-		contaController.cadastrar(new ContaCorrente(1, 456, 1, "Thuany Silva", 1000000.00f, 100000.00f));
-		contaController.cadastrar(new ContaCorrente(1, 456, 2, "Marcia Condarco", 1000000.00f, 10));
+		contaController.cadastrar(new ContaCorrente(contaController.gerarNumero(), 456, 1, "Thuany Silva", 1000000.00f, 100000.00f));
+		contaController.cadastrar(new ContaPoupanca(contaController.gerarNumero(), 456, 2, "Marcia Condarco", 1000000.00f, 10));
 	}
 	
 	private static void listarContas() {
 		contaController.listarTodas();
+		
+	}
+	
+	private static void cadastrarConta() {
+		
+		System.out.print("Digite o número da Agência: ");
+		int agencia = leia.nextInt();
+		
+		System.out.print("Digite o nome do Titular: ");
+		leia.skip("\\R");
+		String titular = leia.nextLine();
+
+		System.out.print("Digite o Tipo da Conta (1 - CC | 2 - CP): ");
+		int tipo = leia.nextInt();
+		
+		System.out.print("Digite o Saldo inicial: ");
+		float saldo = leia.nextFloat();
+		
+		switch(tipo) {
+		case 1 ->{
+			System.out.print("Digite o Limite inicial: ");
+			float limite = leia.nextFloat();
+			leia.nextLine();
+			contaController.cadastrar(new ContaCorrente(contaController.gerarNumero(), agencia, tipo, titular, saldo, limite));
+		}
+		case 2 ->{
+			System.out.print("Digite o dia do Aniversário da conta: ");
+			int aniversario = leia.nextInt();
+			leia.nextLine();
+			contaController.cadastrar(new ContaPoupanca(contaController.gerarNumero(), agencia, tipo, titular, saldo, aniversario));
+
+		}
+		default -> System.out.println(Cores.TEXT_RED + "Tipo de conta inválido!" + Cores.TEXT_RESET);
+		}
+	}
+	
+	private static void procurarContaPorNumero() {
+		
+		System.out.print("Digite o número da conta: ");
+		int numero = leia.nextInt();
+		leia.nextLine();
+		
+		contaController.procurarPorNumero(numero);
+	}
+	
+	private static void deletarConta() {
+		
+		System.out.print("Digite o número da conta: ");
+		int numero = leia.nextInt();
+		leia.nextLine();
+		
+		Conta conta = contaController.buscarNaCollection(numero);
+		
+		if(conta != null) {
+			
+			System.out.print("\nTem certeza que deseja excluir esta conta? (S/N): ");
+			String confirmacao = leia.nextLine();
+			
+			if(confirmacao.equalsIgnoreCase("S")){
+			contaController.deletar(numero);
+		}else {
+			System.out.println("\nOperação cancelada!");
+		}
+		
+		}else {
+			System.out.printf("\nA conta numero %d não foi encontrada!", numero);
+		
+		
+		}
+			
+		
+		}
+	 private static void atualizarConta() {
+		 System.out.print("Digite o número da conta: ");
+			int numero = leia.nextInt();
+			leia.nextLine();
+			
+			Conta conta = contaController.buscarNaCollection(numero);
+			
+			if(conta != null) {
+				
+				int agencia = conta.getAgencia();
+				String titular = conta.getTitular();
+				int tipo = conta.getTipo();
+				float saldo = conta.getSaldo();
+				
+				System.out.printf("A Agência atual: %d\nNova Agência (Pressione ENTER para manter a agência atual): ", agencia);
+				String entrada = leia.nextLine();
+				agencia = entrada.isEmpty() ? agencia : Integer.parseInt(entrada);
+				
+								
+				System.out.printf("O nome do Titular atual: %s\n Novo Titular (Pressione ENTER para manter o nome do Titular atual): ", titular);
+				entrada = leia.nextLine();
+				titular = entrada.isEmpty() ? titular : entrada;
+
+								
+				System.out.printf("O Saldo atual é %.2f\nNovo Saldo (Pressione ENTER para manter o saldo atual): ", saldo);
+				entrada = leia.nextLine();
+				saldo = entrada.isEmpty() ? saldo : Float.parseFloat(entrada);
+				
+				switch(tipo) {
+				case 1 ->{
+					float limite = ((ContaCorrente) conta).getLimite();
+					
+					System.out.printf("O Limite atual é %.2f\nNovo Limite (Pressione ENTER para manter o limite atual: ", limite);
+					entrada = leia.nextLine();
+					limite = entrada.isEmpty() ? limite : Float.parseFloat(entrada);
+					contaController.atualizar(new ContaCorrente(numero, agencia, tipo, titular, saldo, limite));
+				}
+				case 2 ->{
+					int aniversario = ((ContaPoupanca)conta).getAniversario();
+					
+					System.out.printf("O Aniversário atual é %d\nNovo Aniversário (Pressione ENTER para manter o aniversário atual): ", aniversario);
+					entrada = leia.nextLine();
+					aniversario = entrada.isEmpty() ? aniversario : Integer.parseInt(entrada);
+					contaController.atualizar(new ContaPoupanca(numero, agencia, tipo, titular, saldo, aniversario));
+
+				}
+				default -> System.out.println(Cores.TEXT_RED + "Tipo de conta inválido!" + Cores.TEXT_RESET);
+				}
+				
+			}else {
+				System.out.printf("\nA conta numero %d não foi encontrada!", numero);
+			}
 	}
 }
+		
 			
 			
 			
